@@ -47,12 +47,6 @@ class Movie
         return intval(date('Y'));
     }
 
-    // Metodo per ottenere la descrizione del film
-    public function getDescription()
-    {
-        $price = $this->getPrice();
-        return $this->name . " " . $this->author . " " . $price . " " . $this->ticketNumber;
-    }
 
     // Metodo per ottenere il prezzo del biglietto
     public function getPrice()
@@ -68,6 +62,13 @@ class Movie
         } else {
             return 15;
         }
+    }
+
+    // Metodo per ottenere la descrizione del film
+    public function getDescription()
+    {
+        $price = $this->getPrice();
+        return $this->name . " " . $this->author . " " . $price . " " . $this->ticketNumber;
     }
 }
 
