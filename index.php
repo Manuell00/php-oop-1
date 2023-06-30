@@ -3,13 +3,12 @@
 // Creo la classe Ticket
 class Ticket
 {
-
     // Definisco gli attributi per la classe Ticket
     public $owner_name;
     public $owner_surname;
     public $year_of_birth;
 
-    // Inserisco construct
+    // Inserisco il costruttore
     public function __construct($owner_name, $owner_surname, $year_of_birth)
     {
         $this->owner_name = $owner_name;
@@ -18,68 +17,53 @@ class Ticket
     }
 }
 
-
-// Creo una classe : Movie
+// Creo la classe Movie
 class Movie
 {
-    // ATTRIBUTI classe Movie
+    // Attributi della classe Movie
     public $name;
     public $author;
     public $ticket;
+    public $ticketNumber;
 
-    // Inserisco un metodo static
-    public static $ticketCounter = 0;
+    // Contatore statico per tenere traccia del numero di istanze di Movie
+    public static $counter = 0;
 
-
-    // METODO COSTRUTTORE :
-    // Inserisco un istanza della classe Ticket che rappresenta lo specifico ticket per quel Movie
+    // Costruttore della classe Movie
     public function __construct($name, $author, Ticket $ticket)
     {
-
-        // Assegnamo il valore del parametro name all'attributo $name dell'oggetto corrente.
-        // Facciamo lo stesso con i restanti attributi
         $this->name = $name;
         $this->author = $author;
         $this->ticket = $ticket;
 
-        // Incremento il numero di biglietti per ogni istanza
-        self::$ticketCounter++;
+        // Incremento del contatore e dopo assegno il valore del counter a ticketNumber
+        self::$counter++;
+        $this->ticketNumber = self::$counter;
     }
 
-    // METODI STATICI:
+    // Metodo statico per ottenere l'anno corrente
     public static function getCurrentYear()
     {
-        $currentYear = intval(date('Y'));
-        return $currentYear;
+        return intval(date('Y'));
     }
 
-    // METODI GENERALI :
-
+    // Metodo per ottenere la descrizione del film
     public function getDescription()
     {
-        // Definisco in una variabile il metodo in modo da poterlo utilizzare nella concatenazione
         $price = $this->getPrice();
-
-
-        return $this->name . " " . $this->author . " " . $price;
+        return $this->name . " " . $this->author . " " . $price . " " . $this->ticketNumber;
     }
 
-
+    // Metodo per ottenere il prezzo del biglietto
     public function getPrice()
     {
-        // Creo una variabile per l'anno corrente
-        $currentYear =  $this->getCurrentYear();
-
-        // Creo una variabile per il valore dell'anno di nascita
+        $currentYear = self::getCurrentYear();
         $birthYear = $this->ticket->year_of_birth;
-
-        // Creo una variabile contenente la sottrazione dei due per capire l'età
         $differenceYear = $currentYear - $birthYear;
 
-        // Verfico prezzo ticket a seconda dell'età
-        if ($this->ticket->$differenceYear < 18) {
+        if ($differenceYear < 18) {
             return 5;
-        } else if ($this->ticket->$differenceYear > 70) {
+        } else if ($differenceYear > 70) {
             return 10;
         } else {
             return 15;
@@ -87,11 +71,16 @@ class Movie
     }
 }
 
+// Creazione delle istanze di Movie
+$movie1 = new Movie('Avatar', 'James Cameron', new Ticket('Manuel', 'Caselli', 2010));
+$movie2 = new Movie('Inception', 'Christopher Nolan', new Ticket('John', 'Doe', 1985));
+$movie3 = new Movie('The Shawshank Redemption', 'Frank Darabont', new Ticket('Jane', 'Smith', 1992));
 
+// Array per memorizzare le istanze di Movie
+$movies = array($movie1, $movie2, $movie3);
 
-// Creazione istanza(oggetto)
-$movie_1 = new Movie('Avatar', 'James Cameron', new Ticket('Manuel', 'Caselli', 2000));
-
-// Richiamo la funzione description sull'istanza $movie_1
-$description = $movie_1->getDescription();
-echo $description;
+// Ciclo sull'array e richiamo il metodo getDescription() per ogni istanza
+foreach ($movies as $movie) {
+    $description = $movie->getDescription();
+    echo $description . "<br>";
+}
